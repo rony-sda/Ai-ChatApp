@@ -1,10 +1,11 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
+
 import { Loader2 } from "lucide-react";
 
 import Image from "next/image";
-import React, { useTransition } from "react";
+import { useTransition } from "react";
 import { toast } from "sonner";
 
 const SignIn = () => {
@@ -39,6 +40,7 @@ const SignIn = () => {
         },
         onError: (error) => {
           toast.error(error.error.message)
+          console.log(error)
         }
       }
     });
@@ -53,7 +55,7 @@ const SignIn = () => {
       </div>
 
 			<p className="mt-2 text-lg text-muted-foreground font-semibold">
-				  Sign in below (we'll increase your message limits if you do 😉)
+				  Sign in below (Sign in to continue chatting with AI 🤖)
 			</p>
 
            <Button
