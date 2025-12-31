@@ -17,7 +17,7 @@ const AuthLayout = async({children}: Readonly<{
 
   return (
     <>
-        {children}
+  {children}
     </>
   )
 }
