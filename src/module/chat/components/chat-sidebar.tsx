@@ -1,7 +1,15 @@
-"use client"
+'use client';
 
-
-import { Search, Plus, Clock, MessageSquare, Settings, HelpCircle, Sun, Moon } from "lucide-react"
+import {
+  Search,
+  Plus,
+  Clock,
+  MessageSquare,
+  Settings,
+  HelpCircle,
+  Sun,
+  Moon,
+} from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -13,39 +21,41 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-} from "@/components/ui/sidebar"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import Image from "next/image"
-import { useTheme } from "next-themes"
-import { authClient } from "@/lib/auth-client"
+} from '@/components/ui/sidebar';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Image from 'next/image';
+import { useTheme } from 'next-themes';
 
+function ChatSidebar({ session }: { session: any }) {
+  const { theme, setTheme } = useTheme();
 
- function ChatSidebar ({session}: {session: any}) {
+  if (theme === undefined) return null;
 
-  const { theme, setTheme } = useTheme()
-
-
- if(theme === undefined) return null
- 
   return (
-    <Sidebar variant="inset" className="border-r border-border/50 w-80  bg-background">
+    <Sidebar
+      variant="inset"
+      className="border-r border-border/50 w-80  bg-background"
+    >
       <SidebarHeader className="p-4 flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="rounded-lg flex items-center justify-center gap-2">
-           <Image src={'/logo.jpeg'} alt="Logo" width={40} height={40}/>
-          <span className="font-bold text-xl tracking-tight text-foreground">Ai ChatApp</span>
+            <Image src={'/logo.jpeg'} alt="Logo" width={40} height={40} />
+            <span className="font-bold text-xl tracking-tight text-foreground">
+              Ai ChatApp
+            </span>
+          </div>
         </div>
-         </div>
-     
       </SidebarHeader>
 
       <SidebarContent>
         <div className="px-4 mb-4 relative">
           <Search className="absolute left-7 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <Input placeholder="Search" className="pl-9 h-9 bg-muted/50 border-transparent focus-visible:bg-background" />
-         
+          <Input
+            placeholder="Search"
+            className="pl-9 h-9 bg-muted/50 border-transparent focus-visible:bg-background"
+          />
         </div>
 
         <div className="px-4 mb-6">
@@ -63,11 +73,11 @@ import { authClient } from "@/lib/auth-client"
           <SidebarGroupContent>
             <SidebarMenu className="px-2">
               {[
-                "Marketing Copy for SaaS",
-                "Python Script Debugging",
-                "Product Strategy Sync",
-                "Holiday Trip Planning",
-                "Research on Quantum Computing",
+                'Marketing Copy for SaaS',
+                'Python Script Debugging',
+                'Product Strategy Sync',
+                'Holiday Trip Planning',
+                'Research on Quantum Computing',
               ].map((item, i) => (
                 <SidebarMenuItem key={i}>
                   <SidebarMenuButton className="px-2 py-5 rounded-lg group">
@@ -104,19 +114,21 @@ import { authClient } from "@/lib/auth-client"
       <SidebarFooter className="p-4 border-t border-border/50">
         <div className="flex items-center gap-1 p-1 bg-muted/50 rounded-xl mb-6">
           <Button
-            
             size="sm"
-             className={`${theme === "light" ? "bg-primary" : "bg-muted"} flex-1 gap-2 h-8 rounded-lg shadow-none`}
-            onClick={() => setTheme("light")}
+            className={`${
+              theme === 'light' ? 'bg-primary' : 'bg-muted'
+            } flex-1 gap-2 h-8 rounded-lg shadow-none`}
+            onClick={() => setTheme('light')}
           >
             <Sun className="size-3.5" />
             Light
           </Button>
           <Button
-           
             size="sm"
-            className={`${theme === "dark" ? "bg-primary" : "bg-muted"} flex-1 gap-2 h-8 rounded-lg shadow-none`}
-            onClick={() => setTheme("dark")}
+            className={`${
+              theme === 'dark' ? 'bg-primary' : 'bg-muted'
+            } flex-1 gap-2 h-8 rounded-lg shadow-none`}
+            onClick={() => setTheme('dark')}
           >
             <Moon className="size-3.5" />
             Dark
@@ -129,12 +141,16 @@ import { authClient } from "@/lib/auth-client"
             <AvatarFallback>EC</AvatarFallback>
           </Avatar>
           <div className="flex flex-col min-w-0">
-            <span className="text-sm font-bold truncate">{session?.user.name}</span>
-            <span className="text-xs text-muted-foreground truncate">{session?.user?.email}</span>
+            <span className="text-sm font-bold truncate">
+              {session?.user.name}
+            </span>
+            <span className="text-xs text-muted-foreground truncate">
+              {session?.user?.email}
+            </span>
           </div>
         </div>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
-export default ChatSidebar
+export default ChatSidebar;

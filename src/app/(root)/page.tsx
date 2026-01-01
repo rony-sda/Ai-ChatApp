@@ -1,8 +1,9 @@
 'use client'
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
-import ChatMain from "@/module/home/components/chat-main";
-import ChatSidebar from "@/module/home/components/chat-sidebar";
+import ChatMain from "@/module/chat/components/chat-main";
+import ChatSidebar from "@/module/chat/components/chat-sidebar";
+
 
 
 export default function Home() {
