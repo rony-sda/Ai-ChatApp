@@ -265,8 +265,7 @@ export function ChatMain({ user }: iAppProps) {
             </div>
         </form>
           <p className="text-center text-[10px] text-muted-foreground/60 mt-4 font-medium tracking-wide">
-            Ai-Chat may generate inaccurate information about people, places, or
-            facts. Model: Open Router
+           AI responses may be unavailable or inaccurate at times due to model limitations. Some models may not respond—please switch models and try again.
           </p>
         </div>
       </div>

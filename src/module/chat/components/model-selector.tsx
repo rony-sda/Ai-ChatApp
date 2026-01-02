@@ -93,7 +93,7 @@ export function ModelSelector({
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className={"w-3xl p-0"} align="start">
+        <PopoverContent className={"w-xs md:w-3xl p-0"} align="start">
           <div className="p-3 border-b">
             <div className="relative">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -141,8 +141,11 @@ export function ModelSelector({
                   </div>
                   <div className="flex-1 min-w-0 space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm leading-none truncate">
+                      <span className="hidden md:block font-medium text-sm leading-none truncate">
                         {model.name}
+                      </span>
+                       <span className="md:hidden font-medium text-sm leading-none truncate">
+                        {model.name.slice(0,20)}
                       </span>
                       {isFreeModel(model) && (
                         <Badge

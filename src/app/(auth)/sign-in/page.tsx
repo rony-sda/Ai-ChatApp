@@ -50,12 +50,12 @@ const SignIn = () => {
   return (
     <section className="flex flex-col items-center justify-center min-h-screen bg-background px-4 py-16 md:py-32">
       <div className="flex flex-row justify-center items-center gap-x-2">
-        <h1 className="text-3xl font-extrabold text-foreground">Welcome to Ai-ChatApp</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold text-foreground">Welcome to Ai-ChatApp</h1>
        
       </div>
 
-			<p className="mt-2 text-lg text-muted-foreground font-semibold">
-				  Sign in below (Sign in to continue chatting with AI 🤖)
+			<p className="mt-2 text-lg text-muted-foreground text-center font-semibold">
+				  (Sign in to continue chatting with AI 🤖)
 			</p>
 
            <Button
