@@ -74,14 +74,12 @@ const MessageMain = ({ chatId } : { chatId: string }) => {
             parts: Array.isArray(parts)
               ? parts
               : [{ type: "text", text: msg.content }],
-            createdAt: msg.createdAt,
           };
         } catch (error) {
           return {
             id: msg.id,
             role: convertMessageRole(msg.messageRole),
             parts: [{ type: "text", text: msg.content }],
-            createdAt: msg.createdAt,
           };
         }
       });

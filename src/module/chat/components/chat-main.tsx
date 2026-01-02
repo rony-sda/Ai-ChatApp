@@ -141,7 +141,7 @@ export function ChatMain({ user }: iAppProps) {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar className="size-8 ml-1">
-              <AvatarImage src={user?.image || '/logo.jpeg'} />
+              <AvatarImage src={user?.image || '/logo.png'} />
               <AvatarFallback>AI</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>

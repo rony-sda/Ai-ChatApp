@@ -1,8 +1,9 @@
-import { convertToModelMessages, streamText, tool } from "ai";
+import { convertToModelMessages, streamText } from "ai";
 import db from "@/lib/db";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { CHAT_SYSTEM_PROMPT } from "@/lib/prompt";
 import { MessageRole, MessageType } from '@/lib/generated/prisma/enums';
+import { NextRequest } from "next/server";
 
 
 // initalize openRouter provider
@@ -22,8 +23,10 @@ function convertStoredMessageToUI(msg: {
   createdAt: Date;
 } | null {
   try {
-    const parts = JSON.parse(msg.content);
-    const validParts = parts.filter((part: any) => part.type === "text");
+    const parts = JSON.parse(msg.content) as Array<{ type: string; text?: string }>;
+    const validParts = parts
+      .filter((part: { type: string; text?: string }) => part.type === "text" && part.text !== undefined)
+      .map((part: { type: string; text?: string }) => ({ type: "text", text: part.text! }));
 
     if (validParts.length === 0) return null;
 
@@ -51,7 +54,10 @@ function convertStoredMessageToUI(msg: {
   }
 }
 
-function extractPartsAsJSON(message) {
+function extractPartsAsJSON(message: {
+  parts?: Array<{ type: string; text?: string }>;
+  content?: string;
+}): string {
   if (message.parts && Array.isArray(message.parts)) {
     return JSON.stringify(message.parts);
   }
@@ -62,7 +68,7 @@ function extractPartsAsJSON(message) {
 
 // Check if a model supports system prompts
 // Some models (like Google Gemma) don't support system/developer instructions
-function modelSupportsSystemPrompt(model: string): boolean {
+function modelSupportsSystemPrompt(model: string | undefined): boolean {
   if (!model) return true; // Default to supporting if model is not provided
   
   const modelLower = model.toLowerCase();
@@ -83,14 +89,21 @@ function modelSupportsSystemPrompt(model: string): boolean {
   return !isUnsupported;
 }
 
-export async function POST(req) {
+export async function POST(req: NextRequest) {
   try {
+    const body = await req.json() as {
+      chatId?: string;
+      messages?: unknown;
+      model?: string;
+      skipUserMessage?: boolean;
+    };
+    
     const {
       chatId,
       messages: newMessages,
       model,
       skipUserMessage,
-    } = await req.json();
+    } = body;
 
     const previousMessages = chatId
       ? await db.message.findMany({
@@ -120,18 +133,22 @@ export async function POST(req) {
         .map((msg) => ({
           role: msg.role,
           content: msg.parts
-            .filter((p) => p.type === "text")
-            .map((p) => p.text)
+            .filter((p: { type: string; text?: string }) => p.type === "text")
+            .map((p: { type: string; text?: string }) => p.text)
             .join("\n"),
         }))
-        .filter((m) => m.content);
+        .filter((m: { role: string; content: string }) => m.content);
     }
 
     // Check if model supports system prompts
     const supportsSystemPrompt = modelSupportsSystemPrompt(model);
 
-    const streamTextOptions: any = {
-      model: provider.chat(model),
+    const streamTextOptions: {
+      model: ReturnType<typeof provider.chat>;
+      messages: typeof modelMessages;
+      system?: string;
+    } = {
+      model: provider.chat(model || ""),
       messages: modelMessages,
     };
 
@@ -146,9 +163,21 @@ export async function POST(req) {
     return result.toUIMessageStreamResponse({
       sendReasoning: true,
       originalMessages: allUIMessages,
-      onFinish: async ({ responseMessage }) => {
+      onFinish: async ({ responseMessage }: { responseMessage: { parts?: Array<{ type: string; text?: string }> } }) => {
         try {
-          const messagesToSave = [];
+          // Ensure chatId and model are defined before saving
+          if (!chatId || !model) {
+            console.error("❌ Cannot save messages: chatId or model is missing", { chatId, model });
+            return;
+          }
+
+          const messagesToSave: Array<{
+            chatId: string;
+            content: string;
+            messageRole: typeof MessageRole.USER | typeof MessageRole.ASSISTANT;
+            model: string;
+            messageType: typeof MessageType.NORMAL;
+          }> = [];
 
           if (!skipUserMessage) {
             const latestUserMessage =

@@ -95,7 +95,7 @@ function ChatSidebar({ user, chats }: iAppsProps) {
       <SidebarHeader className="p-4 flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="rounded-lg flex items-center justify-center gap-2">
-            <Image src={'/logo.jpeg'} alt="Logo" width={40} height={40} />
+            <Image src={'/logo.png'} alt="Logo" width={40} height={40} />
             <span className="font-bold text-xl tracking-tight text-foreground">
               Ai ChatApp
             </span>
@@ -231,7 +231,7 @@ function ChatSidebar({ user, chats }: iAppsProps) {
 
         <div className="flex items-center gap-3">
           <Avatar className="size-10 rounded-full border-2 border-background ring-1 ring-border">
-            <AvatarImage src={user?.image || '/logo.jpeg'} />
+            <AvatarImage src={user?.image || '/logo.png'} />
             <AvatarFallback>EC</AvatarFallback>
           </Avatar>
           <div className="flex flex-col min-w-0">
